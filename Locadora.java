@@ -15,6 +15,7 @@ public class Locadora {
             System.out.println("\nMENU PRINCIPAL ");
             System.out.println("[1] - Gerenciar Veículos: ");
             System.out.println("[2] - Gerenciar Clientes: ");
+            System.out.println("[2] - Gerenciar Clientes PJ: ");
             System.out.println("[0] - Sair: ");
 
             try {
@@ -29,7 +30,13 @@ public class Locadora {
                     break;
 
                 case 2:
-                    // gerenciar clientes
+                    GerenciadorCliente gc = new GerenciadorCliente();
+                    gc.menu();;
+                    break;
+
+                case 3:
+                    GerenciadorClientePJ gcPJ = new GerenciadorClientePJ();
+                    gcPJ.menu();;
                     break;
 
                 case 0:
@@ -40,5 +47,6 @@ public class Locadora {
                     System.out.println("Opção informada inválida.");
             }
         }
+        scanner.close();
     }
 }

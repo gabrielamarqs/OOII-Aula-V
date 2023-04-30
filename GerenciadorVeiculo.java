@@ -16,64 +16,81 @@ public class GerenciadorVeiculo {
     public void menu() {
         int opcao = -1;
         while(opcao != 0){
-            System.out.println("\n------------------------------------");
-            System.out.println("GERENCIAMENTO DE VEICULOS ");
-            System.out.println("[1] - Cadastrar: ");
-            System.out.println("[2] - Consultar: ");
-            System.out.println("[3] - Alterar: ");
-            System.out.println("[4] - Excluir: ");
-            System.out.println("[5] - Listar: ");
-            System.out.println("[0] - Sair: ");
-
             try {
-                opcao = Integer.parseInt(scanner.nextLine());
-            } catch (Exception e) {
-                System.out.println("Erro: Informe um número inteiro.");
-            }
-            switch (opcao) {
-                case 1:
+                
+                System.out.println("\n------------------------------------");
+                System.out.println("GERENCIAMENTO DE VEICULOS ");
+                System.out.println("[1] - Cadastrar: ");
+                System.out.println("[2] - Consultar: ");
+                System.out.println("[3] - Alterar: ");
+                System.out.println("[4] - Excluir: ");
+                System.out.println("[5] - Listar: ");
+                System.out.println("[0] - Sair: ");
+                
+                try {
+                    opcao = Integer.parseInt(scanner.nextLine());
+                } catch (Exception e) {
+                    System.out.println("Erro: Informe um número inteiro.");
+                }
+                switch (opcao) {
+                    case 1:
                     this.cadastrar();
                     break;
-                
-                case 2:
+                    
+                    case 2:
                     this.consultar();
                     break;
-
-                case 3:
+                    
+                    case 3:
                     this.alterar();
                     break;
                     
-                case 4:
+                    case 4:
                     this.excluir();;
                     break;
                     
-                case 5:
+                    case 5:
                     this.listar();
                     break;
                     
-                case 0:
+                    case 0:
                     System.out.println("Saindo...");
                     break;
-
-                default:
+                    
+                    default:
                     System.out.println("Opção informada inválida.");
+                }
+            } catch (NumberFormatException e1) {
+                System.out.println("Erro: Caracter inválido.");
             }
         }
-
+            
     }
 
     public void cadastrar() {
         Veiculo v = new Veiculo();
         System.out.println("----------------------");
         System.out.println("[Cadastro de Veiculos]");
+
         System.out.println("Marca: ");
-        v.setMarca(scanner.nextLine());
+        String marca = scanner.nextLine();
+        marca = this.verif(marca);
+        v.setMarca(marca);
+
         System.out.println("Modelo: ");
-        v.setModelo(scanner.nextLine());
+        String modelo = scanner.nextLine();
+        modelo = this.verif(modelo);
+        v.setModelo(modelo);
+
         System.out.println("Chassi: ");
-        v.setChassi(scanner.nextLine());
+        String chassi = scanner.nextLine();
+        chassi = this.verif(chassi);
+        v.setChassi(chassi);
+
         System.out.println("Ano: ");
-        v.setAno(Integer.parseInt(scanner.nextLine()));
+        String ano = scanner.nextLine();
+        ano = this.verif(ano);
+        v.setAno(Integer.parseInt(ano));
 
         // inserir no banco
 
@@ -81,7 +98,14 @@ public class GerenciadorVeiculo {
         if (inserido) {
             System.out.println("Inserido com sucesso.");
         }
+    }
 
+        public String verif (String atributos) {
+        while (atributos.equals("") || atributos.equals("null")) {
+            System.out.println("Insira a informação:");
+            atributos = scanner.nextLine();
+        }
+        return atributos;
     }
 
     public void listar() {
@@ -89,7 +113,11 @@ public class GerenciadorVeiculo {
         System.out.println("==========================");
         System.out.println("Veiculos cadastrados");
         for(Veiculo v : veiculos) {
-            System.out.println("Código: " + v.getCodigo() + ", Marca: " + v.getMarca() + ", Modelo: " + v.getModelo() + ", Chassi: " + v.getChassi() + ", Ano: " + v.getAno() + ".");
+            System.out.println("Código: " + v.getCodigo() 
+            + ", Marca: " + v.getMarca() 
+            + ", Modelo: " + v.getModelo() 
+            + ", Chassi: " + v.getChassi() 
+            + ", Ano: " + v.getAno() + ".");
         }
     }
 
@@ -113,7 +141,11 @@ public class GerenciadorVeiculo {
         int codigo = Integer.parseInt(scanner.nextLine());
         Veiculo v = daoVeiculo.consultar(codigo);
         if(v != null) {
-            System.out.println("Código: " + v.getCodigo() + ", Marca: " + v.getMarca() + ", Modelo: " + v.getModelo() + ", Chassi: " + v.getChassi() + ", Ano: " + v.getAno() + ".");        
+            System.out.println("Código: " + v.getCodigo() 
+            + ", Marca: " + v.getMarca() 
+            + ", Modelo: " + v.getModelo() 
+            + ", Chassi: " + v.getChassi() 
+            + ", Ano: " + v.getAno() + ".");        
         } else {
             System.out.println("Não encontrado.");
         }
@@ -128,11 +160,13 @@ public class GerenciadorVeiculo {
         if (v != null) {
             System.out.println("Dados do veículo");
             System.out.println("[Código: " + v.getCodigo() + "]");
+            
             System.out.println("[Modelo: " + v.getModelo() + "]");
             String modelo = scanner.nextLine();
             if (!modelo.isEmpty()) {
                 v.setModelo(modelo);
             }
+
             System.out.println("[Marca: " + v.getMarca() + "]");
             String marca = scanner.nextLine();
             if(!marca.isEmpty()) {
@@ -158,10 +192,6 @@ public class GerenciadorVeiculo {
             } else {
                 System.out.println("Não encontrado.");
             }
-
         }
-
     }
-
-
 }

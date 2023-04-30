@@ -8,10 +8,9 @@ public class GerenciadorConexao {
 
     public static Connection pegarConexao() throws ClassNotFoundException, SQLException {
         String url = "jdbc:mysql://127.0.0.1/bd_locadora?characterEnconding=latin1";
+        // o nome do banco de dados foi mudado 
         String usuario = "gabriela";
-        // em casa gabriela
         String senha = "daniela";
-        // em casa daniela
 
         Class.forName("com.mysql.cj.jdbc.Driver");
         // caminho onde tá minha class driver
