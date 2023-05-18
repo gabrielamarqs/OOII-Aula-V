@@ -131,39 +131,67 @@ public class DaoClientePJ {
         return qtd;
     }
 
-    public Veiculo consultar(int cod){
+    public ClientePJ consultar(int cod) {
         // public -Veiculo- consultar
         // Veiculo é o que eu quero retornar
-        Veiculo v = null;
+        ClientePJ cli = null;
         // inicializar com null para não dizer que o código não foi inicializado
         // caso fosse  null ia retornar qualquer coisa
         try {
             this.conectar();
-            ResultSet rs = st.executeQuery("SELECT * FROM tb_veiculos WHERE codigo = " + cod + ";");
+            ResultSet rs = st.executeQuery(
+                    "SELECT * FROM tb_clientes_pj AS c, tb_enderecos_pj AS e WHERE c.cod_cli_pj = e.cod_cli_pj AND c.cod_cli_pj = "
+                            + cod + ";");
             if(rs.next()) {
-                v = new Veiculo();
-                v.setCodigo(rs.getInt("codigo"));
-                v.setMarca(rs.getString("marca"));
-                v.setModelo(rs.getString("modelo"));
-                v.setChassi(rs.getString("chassi"));
-                v.setAno(rs.getInt("ano"));
+                cli = new ClientePJ();
+                cli.setCodigoClientePJ(rs.getInt("cod_cli_pj"));
+                cli.setNome(rs.getString("nome"));
+                cli.setCnpj(rs.getString("cnpj"));
+
+                EnderecoPJ endPj = new EnderecoPJ();
+                endPj.setCodigo(rs.getInt("cod_end"));
+                endPj.setRua(rs.getString("rua"));
+                endPj.setNumero(rs.getInt("numero"));
+                endPj.setBairro(rs.getString("bairro"));
+                endPj.setCep(rs.getString("cep"));
+
+                cli.setEnderecoPJ(endPj);
+
             }
         } catch (Exception e1) {
             System.out.println("Error: " + e1.getMessage());
         } finally {
             this.desconectar();
         }
-        return v;
+        return cli;
     }
 
-    public int atualizar(Veiculo v) throws NumberFormatException {
+    public int atualizar(ClientePJ cliPj) throws NumberFormatException {
         int qtd = 0;
         try {
             this.conectar();
-            String comando = "UPDATE tb_veiculos SET marca ='" + v.getMarca() + " ',  modelo ='" + v.getModelo() + "', chassi = '" + v.getChassi() + "', ano = " + v.getAno() + " WHERE codigo = " + v.getCodigo() + ";";
-            System.out.println(comando);
-            st.executeUpdate(comando);
-            qtd = st.getUpdateCount();
+
+            PreparedStatement pst = conn.prepareStatement(
+                    "UPDATE tb_clientes_pj SET nome = ?, cnpj = ? WHERE cod_cli_pj = ?;",
+                    Statement.RETURN_GENERATED_KEYS);
+            pst.setString(1, cliPj.getNome());
+            pst.setString(2, cliPj.getCnpj());
+            pst.setInt(3, cliPj.getCodigoClientePJ());
+            pst.executeUpdate();
+
+            PreparedStatement pstEnd = conn.prepareStatement(
+                    "UPDATE tb_enderecos_pj SET rua = ?, numero = ?, bairro = ?, cep = ? WHERE cod_cli_pj = ?;");
+            pstEnd.setString(1, cliPj.getEnderecoPJ().getRua());
+            pstEnd.setInt(2, cliPj.getEnderecoPJ().getNumero());
+            pstEnd.setString(3, cliPj.getEnderecoPJ().getBairro());
+            pstEnd.setString(4, cliPj.getEnderecoPJ().getCep());
+            pstEnd.setInt(5, cliPj.getCodigoClientePJ());
+            pstEnd.executeUpdate();
+
+            qtd = pst.getUpdateCount();
+            if (qtd > 0) {
+                System.out.println("Alterado com sucesso.");
+            }
         } catch (SQLException e1) {
             System.out.println("Chave SQL duplicada: " + e1.getMessage());
         } catch (Exception e2) {
@@ -173,8 +201,6 @@ public class DaoClientePJ {
         }
         return qtd;
     }
-
-
 }
 
 

@@ -156,64 +156,82 @@ public class GerenciadorClientePJ {
     }
 
     public void consultar() {
-        // System.out.println("==========================");
-        // System.out.println("Consulta de veiculos");
-        // System.out.println("Código: ");
-        // int codigo = Integer.parseInt(scanner.nextLine());
-        // Veiculo v = daoClientePJ.consultar(codigo);
-        // if(v != null) {
-        //     System.out.println("Código: " + v.getCodigo() 
-        //     + ", Marca: " + v.getMarca() 
-        //     + ", Modelo: " + v.getModelo() 
-        //     + ", Chassi: " + v.getChassi() 
-        //     + ", Ano: " + v.getAno() + ".");        
-        // } else {
-        //     System.out.println("Não encontrado.");
-        // }
+        System.out.println("==========================");
+        System.out.println("Consulta de Clientes PJ");
+        System.out.println("Código: ");
+        int codigo = Integer.parseInt(scanner.nextLine());
+
+        ClientePJ cliPj = daoClientePJ.consultar(codigo);
+        if(cliPj != null) {
+            System.out.println("Código: " + cliPj.getCodigoClientePJ() 
+            + ", Nome: " + cliPj.getNome() 
+            + ", CNPJ: " + cliPj.getCnpj() 
+            + "\n[Endereço] Rua: " + cliPj.getEnderecoPJ().getRua() 
+            + ", Rua: " + cliPj.getEnderecoPJ().getRua()
+            + ", Número: " + cliPj.getEnderecoPJ().getNumero()
+            + ", Bairro: " + cliPj.getEnderecoPJ().getBairro()
+            + ", CEP: " + cliPj.getEnderecoPJ().getCep()) ; 
+        } else {
+            System.out.println("Não encontrado.");
+        }
     }
 
     public void alterar() {
-        // System.out.println("----------------------");
-        // System.out.println("[Alteração de Veiculos]");
-        // System.out.println("Código: ");
-        // int codigo = Integer.parseInt(scanner.nextLine());
-        // Veiculo v = daoClientePJ.consultar(codigo);
-        // if (v != null) {
-        //     System.out.println("Dados do veículo");
-        //     System.out.println("[Código: " + v.getCodigo() + "]");
+        System.out.println("----------------------");
+        System.out.println("[Alteração de Veiculos]");
+        System.out.println("Código: ");
+        int codigo = Integer.parseInt(scanner.nextLine());
+        ClientePJ cliPJ = daoClientePJ.consultar(codigo);
+        if (cliPJ != null) {
+            System.out.println("Dados do Cliente PJ");
+            System.out.println("[Código: " + cliPJ.getCodigoClientePJ() + "]");
             
-        //     System.out.println("[Modelo: " + v.getModelo() + "]");
-        //     String modelo = scanner.nextLine();
-        //     if (!modelo.isEmpty()) {
-        //         v.setModelo(modelo);
-        //     }
+            System.out.println("[Nome: " + cliPJ.getNome() + "]");
+            String nome = scanner.nextLine().trim();
+            // trim tira o espaço
+            if (!nome.isEmpty()) {
+                cliPJ.setNome(nome);
+            }
 
-        //     System.out.println("[Marca: " + v.getMarca() + "]");
-        //     String marca = scanner.nextLine();
-        //     if(!marca.isEmpty()) {
-        //         v.setMarca(marca);
-        //     }
-
-        //     System.out.println("[Chassi: " + v.getChassi() + "]");
-        //     String chassi = scanner.nextLine();
-        //     if(!chassi.isEmpty()) {
-        //         v.setChassi(chassi);
-        //     }
-
-        //     System.out.println("[Ano: " + v.getAno() + "]");
-        //     String ano = scanner.nextLine();
-        //     if(!ano.isEmpty()){
-        //         v.setAno(Integer.parseInt(ano));
-        //     }
+            System.out.println("[CNPJ: " + cliPJ.getCnpj() + "]");
+            String cnpj = scanner.nextLine().trim();
+            if(!cnpj.isEmpty()) {
+                cliPJ.setCnpj(cnpj);
+            }
             
-        //     // inserir no banco
-        //     int qtdAlterado = daoClientePJ.atualizar(v);
-        //     if(qtdAlterado > 0) {
-        //         System.out.println("Atualizado com sucesso");
-        //     } else {
-        //         System.out.println("Não encontrado.");
-        //     }
-        //}
+            System.out.println("[ ENDEREÇO: ]");
+            System.out.println("[Rua: " + cliPJ.getEnderecoPJ().getRua() + "]");
+            String rua = scanner.nextLine().trim();
+            if(!rua.isEmpty()) {
+                cliPJ.getEnderecoPJ().setRua(rua);
+            }
+
+            System.out.println("[Numero: " + cliPJ.getEnderecoPJ().getNumero() + "]");
+            String numero = scanner.nextLine().trim();
+            if(!numero.isEmpty()){
+                cliPJ.getEnderecoPJ().setNumero(Integer.parseInt(numero));
+            }
+
+            System.out.println("[Bairro: " + cliPJ.getEnderecoPJ().getBairro() + "]");
+            String bairro = scanner.nextLine().trim();
+            if(!bairro.isEmpty()) {
+                cliPJ.getEnderecoPJ().setBairro(bairro);
+            }
+
+            System.out.println("[CEP: " + cliPJ.getEnderecoPJ().getCep() + "]");
+            String cep = scanner.nextLine().trim();
+            if(!cep.isEmpty()) {
+                cliPJ.getEnderecoPJ().setCep(cep);
+            }
+            
+            // inserir no banco
+            int qtdAlterado = daoClientePJ.atualizar(cliPJ);
+            if(qtdAlterado > 0) {
+                System.out.println("Atualizado com sucesso");
+            } else {
+                System.out.println("Não encontrado.");
+            }
+        }
     }
 }
 
